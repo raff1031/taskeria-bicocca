@@ -3,7 +3,6 @@
 Sito web ufficiale de **La Taskeria Bicocca** — La Romana a Portafoglio.
 
  Via Piero Caldirola, 5 · 20126 Milano (Bicocca)  
- 340 474 0637  
  [@lataskeria_bicocca](https://instagram.com/lataskeria_bicocca)  
  Lun–Sab 11:30–16:00
 
