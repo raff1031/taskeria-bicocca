@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Taskeria – La Romana a Portafoglio. Pizza romana al taglio artigianale nel cuore di Roma.">
+  <title>Taskeria — La Romana a Portafoglio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,400;1,600&family=Cormorant+SC:wght@300;500;600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void: #080604;
+      --gold: #C8922A;
+      --gold-light: #E5B84A;
+      --parchment: #E8D09A;
+      --parchment-dim: #8A7050;
+      --card: #100E08;
+      --white: #F5F0E8;
+      --nav-h: 72px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--void);
+      color: var(--parchment);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { cursor: pointer; font-family: inherit; border: none; }
+
+    .eyebrow {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .section-title {
+      font-family: 'Cormorant SC', serif;
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.1;
+    }
+    .gold-line {
+      width: 0; height: 1px; background: var(--gold); display: block;
+      transition: width 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s;
+    }
+    .gold-line.visible { width: 48px; }
+
+    /* REVEAL — three materials per impeccable/animate */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* translateX from left — editorial wipe for image panels */
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-28px);
+      transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-left.visible { opacity: 1; transform: none; }
+
+    /* blur-fade — atmospheric for review cards */
+    .reveal-blur {
+      opacity: 0;
+      filter: blur(6px);
+      transition: opacity 0.55s ease, filter 0.55s ease;
+    }
+    .reveal-blur.visible { opacity: 1; filter: blur(0); }
+
+    /* Rotational reveal — per titoli e quote */
+    .reveal-rotate {
+      opacity: 0;
+      transform: translateY(20px) rotate(-2deg);
+      transform-origin: left center;
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-rotate.visible { opacity: 1; transform: none; }
+
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.18s; }
+    .reveal-d3 { transition-delay: 0.28s; }
+    .reveal-d4 { transition-delay: 0.38s; }
+
+    /* NAV */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(24px, 5vw, 72px);
+      transition: background 0.4s, backdrop-filter 0.4s;
+    }
+    .nav.scrolled {
+      background: rgba(8,6,4,0.93);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(200,146,42,0.12);
+    }
+    .nav-logo img { height: 38px; width: auto; }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--parchment-dim);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      display: inline-block;
+      padding: 10px 24px;
+      background: var(--gold);
+      color: var(--void);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--gold-light); }
+
+    /* HERO — the signature moment */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: calc(var(--nav-h) + 48px) clamp(24px, 5vw, 72px) 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      transform-origin: center;
+      animation: letterSpread 1.1s cubic-bezier(0.16,1,0.3,1) both 0.3s;
+    }
+
+    /* THE SIGNATURE: sandwich photo bleeds through the letterforms */
+    .hero-brand {
+      font-family: 'Cormorant SC', serif;
+      font-size: min(21vw, 210px);
+      font-weight: 500;
+      line-height: 0.87;
+      letter-spacing: -0.02em;
+
+      background-image: url("Screenshot 2026-06-26 141043.png");
+      background-size: 110%;
+      background-position: center 38%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+
+      filter: drop-shadow(0 0 50px rgba(200,146,42,0.28)) drop-shadow(0 0 100px rgba(200,146,42,0.12));
+      animation: heroReveal 1.6s cubic-bezier(0.16,1,0.3,1) both 0.05s,
+                 bgPan 24s ease-in-out infinite alternate;
+    }
+
+    .hero-tagline {
+      margin-top: 32px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(20px, 2.5vw, 30px);
+      font-weight: 300;
+      color: var(--parchment);
+      letter-spacing: 0.06em;
+      animation: fadeUp 0.9s ease both 0.6s;
+    }
+
+    .hero-stars {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 18px;
+      animation: fadeUp 0.9s ease both 0.75s;
+    }
+    .hero-stars .stars { color: var(--gold); font-size: 13px; letter-spacing: 3px; }
+    .hero-stars span { font-size: 12px; color: var(--parchment-dim); letter-spacing: 0.1em; }
+    .vdivide { width: 1px; height: 12px; background: var(--parchment-dim); opacity: 0.35; }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 44px;
+      animation: fadeUp 0.9s ease both 0.9s;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 14px 40px;
+      background: var(--gold);
+      color: var(--void);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    .btn-outline {
+      display: inline-block;
+      padding: 14px 40px;
+      border: 1px solid rgba(200,146,42,0.4);
+      color: var(--parchment);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+    /* HERO VIDEO AMBIENT BACKGROUND */
+    .hero-video-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .hero-video-bg video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(0.22) saturate(0.45);
+    }
+    .hero-video-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 85% 90% at 50% 55%, transparent 15%, rgba(8,6,4,0.6) 65%, var(--void) 88%),
+        linear-gradient(to bottom, var(--void) 0%, transparent 18%, transparent 82%, var(--void) 100%);
+    }
+    /* Hero content sits above the video */
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* SEPARATOR */
+    .sep {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 0 clamp(24px, 5vw, 72px);
+    }
+    .sep::before, .sep::after {
+      content: ''; flex: 1; height: 1px;
+    }
+    .sep::before { background: linear-gradient(to right, transparent, rgba(200,146,42,0.25)); }
+    .sep::after  { background: linear-gradient(to left, transparent, rgba(200,146,42,0.25)); }
+    .sep-gem {
+      width: 6px; height: 6px; background: var(--gold); flex-shrink: 0;
+      animation: gemSpin 14s linear infinite;
+    }
+
+    /* CHI SIAMO */
+    .chi-siamo {
+      padding: 120px clamp(24px, 5vw, 72px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .chi-img-wrap { position: relative; }
+    .chi-img-wrap img { width: 100%; height: 500px; object-fit: cover; }
+    .chi-img-wrap::before {
+      content: '';
+      position: absolute;
+      top: -14px; left: -14px; right: 14px; bottom: 14px;
+      border: 1px solid rgba(200,146,42,0.28);
+      pointer-events: none;
+    }
+    .chi-content { display: flex; flex-direction: column; gap: 28px; }
+    .chi-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(26px, 2.8vw, 38px);
+      font-weight: 300;
+      line-height: 1.35;
+      color: var(--white);
+    }
+    .chi-quote em { color: var(--gold); font-style: normal; }
+    .chi-body {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--parchment-dim);
+    }
+    .chi-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(200,146,42,0.18);
+    }
+    .stat { display: flex; flex-direction: column; gap: 6px; }
+    .stat-value {
+      font-family: 'Cormorant SC', serif;
+      font-size: 42px;
+      font-weight: 500;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--parchment-dim);
+    }
+
+    /* LE NOSTRE TASCHE */
+    .tasche { padding: 120px 0; }
+    .tasche-head {
+      padding: 0 clamp(24px, 5vw, 72px);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 56px;
+    }
+    .tasche-head-left { display: flex; flex-direction: column; gap: 14px; }
+    .tasche-see-all {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 3px;
+      transition: gap 0.2s;
+    }
+    .tasche-see-all:hover { gap: 14px; }
+
+    .tasche-track {
+      display: flex;
+      gap: 20px;
+      padding: 0 clamp(24px, 5vw, 72px) 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+    }
+    .tasche-track::-webkit-scrollbar { display: none; }
+
+    .card {
+      flex: 0 0 290px;
+      background: var(--card);
+      scroll-snap-align: start;
+      overflow: hidden;
+      position: relative;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    /* hover gestito via JS con 3D tilt */
+
+    .card-img {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .card:hover .card-img { transform: scale(1.06); }
+
+    /* spotlight glow on hover */
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle, rgba(200,146,42,0.35) 0%, transparent 70%);
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .card:hover::after { opacity: 1; }
+
+    .card-body { padding: 22px 22px 24px; position: relative; z-index: 1; }
+    .card-tag {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .card-name {
+      font-family: 'Cormorant SC', serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--parchment-dim);
+      line-height: 1.65;
+    }
+    .card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(200,146,42,0.14);
+    }
+    .card-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--gold);
+    }
+    .card-add {
+      width: 34px; height: 34px;
+      background: transparent;
+      border: 1px solid rgba(200,146,42,0.35);
+      color: var(--gold);
+      font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+    .card-add:hover { background: var(--gold); color: var(--void); transform: scale(1.1); }
+    .card-add.added { background: var(--gold); color: var(--void); }
+
+    /* MENU */
+    .menu { padding: 120px clamp(24px, 5vw, 72px); }
+    .menu-head {
+      text-align: center;
+      margin-bottom: 56px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .tabs {
+      display: flex;
+      border: 1px solid rgba(200,146,42,0.2);
+      width: fit-content;
+    }
+    .tab {
+      padding: 11px 28px;
+      background: transparent;
+      color: var(--parchment-dim);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border-right: 1px solid rgba(200,146,42,0.2);
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab:last-child { border-right: none; }
+    .tab.active { background: var(--gold); color: var(--void); }
+    .tab:not(.active):hover { background: rgba(200,146,42,0.08); color: var(--parchment); }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .menu-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 26px 0;
+      border-bottom: 1px solid rgba(200,146,42,0.08);
+      transition: background 0.2s;
+    }
+    .menu-item:nth-child(odd) { padding-right: 48px; border-right: 1px solid rgba(200,146,42,0.08); }
+    .menu-item:nth-child(even) { padding-left: 48px; }
+    .menu-item:hover { background: rgba(200,146,42,0.03); }
+    .mi-name {
+      font-family: 'Cormorant SC', serif;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .mi-desc {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--parchment-dim);
+      line-height: 1.55;
+      max-width: 260px;
+    }
+    .mi-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 19px;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .menu-note {
+      text-align: center;
+      margin-top: 36px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: var(--parchment-dim);
+    }
+
+    /* FULL-BLEED INTERSTITIAL */
+    .interstitial {
+      position: relative;
+      height: 55vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .interstitial-video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 25%;
+    }
+    .interstitial::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 1;
+      background:
+        linear-gradient(to bottom, var(--void) 0%, transparent 25%, transparent 75%, var(--void) 100%),
+        radial-gradient(ellipse 55% 65% at 50% 50%, transparent 20%, rgba(8,6,4,0.8) 75%);
+    }
+    .interstitial-text {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 0 clamp(24px, 5vw, 72px);
+    }
+    .interstitial-text blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(26px, 3.5vw, 48px);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.35;
+      max-width: 680px;
+    }
+    .interstitial-text blockquote::before {
+      content: '"';
+      display: block;
+      font-size: 72px;
+      color: var(--gold);
+      line-height: 0.4;
+      margin-bottom: 20px;
+      font-style: normal;
+    }
+
+    /* RECENSIONI */
+    .recensioni { padding: 120px clamp(24px, 5vw, 72px); }
+    .rec-head {
+      text-align: center;
+      margin-bottom: 72px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .rating-display { display: flex; align-items: baseline; gap: 14px; }
+    .rating-num {
+      font-family: 'Cormorant SC', serif;
+      font-size: 80px;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .rating-meta { display: flex; flex-direction: column; gap: 5px; }
+    .rating-stars { color: var(--gold); font-size: 15px; letter-spacing: 3px; }
+    .rating-count { font-size: 11px; color: var(--parchment-dim); letter-spacing: 0.12em; }
+
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .rec-card {
+      background: var(--card);
+      padding: 28px;
+      border: 1px solid rgba(200,146,42,0.08);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .rec-card:hover { border-color: rgba(200,146,42,0.28); transform: translateY(-4px); }
+    .rec-stars { color: var(--gold); font-size: 11px; letter-spacing: 3px; margin-bottom: 14px; }
+    .rec-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--parchment);
+      margin-bottom: 22px;
+    }
+    .rec-author { display: flex; align-items: center; gap: 12px; }
+    .rec-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: rgba(200,146,42,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant SC', serif;
+      font-size: 14px;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .rec-name { font-size: 12px; font-weight: 500; color: var(--white); }
+    .rec-date { font-size: 10px; color: var(--parchment-dim); margin-top: 2px; }
+
+    /* ORDINA */
+    .ordina {
+      padding: 120px clamp(24px, 5vw, 72px);
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .ordina-head { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
+    .ordina-sub {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--parchment-dim);
+    }
+    .form-group { display: flex; flex-direction: column; gap: 7px; margin-bottom: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-label {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .form-input, .form-select, .form-textarea {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(200,146,42,0.2);
+      color: var(--parchment);
+      padding: 13px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--parchment-dim); opacity: 0.55; }
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23C8922A' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      cursor: pointer;
+    }
+    .form-select option { background: #100E08; color: #E8D09A; }
+    .form-textarea { resize: vertical; min-height: 90px; }
+    .form-submit {
+      width: 100%;
+      padding: 15px;
+      background: var(--gold);
+      color: var(--void);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.2s;
+      margin-top: 8px;
+    }
+    .form-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    .info-block { display: flex; flex-direction: column; gap: 28px; }
+    .info-block h3 {
+      font-family: 'Cormorant SC', serif;
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .info-row {
+      display: flex;
+      gap: 14px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(200,146,42,0.1);
+    }
+    .info-icon { color: var(--gold); width: 16px; height: 16px; margin-top: 2px; flex-shrink: 0; display: block; }
+    .info-lbl {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .info-val { font-size: 13px; color: var(--parchment); line-height: 1.65; }
+    .info-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      margin-top: 8px;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 64px clamp(24px, 5vw, 72px) 32px;
+      border-top: 1px solid rgba(200,146,42,0.12);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand img { height: 44px; margin-bottom: 14px; }
+    .footer-brand p { font-size: 12px; font-weight: 300; color: var(--parchment-dim); line-height: 1.8; }
+    .footer-col h4 {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a { font-size: 12px; color: var(--parchment-dim); transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--parchment); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 28px;
+      border-top: 1px solid rgba(200,146,42,0.08);
+    }
+    .footer-bottom p { font-size: 10px; color: var(--parchment-dim); opacity: 0.55; }
+
+    /* KEYFRAMES */
+
+    /* TASKERIA — condensa da nebbia caotica in un colpo solo */
+    @keyframes heroReveal {
+      0%   { opacity: 0; transform: scale(2.4) rotate(-7deg);   filter: blur(36px) drop-shadow(0 0 0 rgba(200,146,42,0)); }
+      30%  { opacity: 0.65; transform: scale(0.9) rotate(3deg); filter: blur(10px) drop-shadow(0 0 90px rgba(200,146,42,0.65)); }
+      62%  { opacity: 0.95; transform: scale(1.04) rotate(-1deg); filter: blur(1.5px) drop-shadow(0 0 55px rgba(200,146,42,0.38)); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg);       filter: drop-shadow(0 0 50px rgba(200,146,42,0.28)) drop-shadow(0 0 100px rgba(200,146,42,0.12)); }
+    }
+
+    /* Eyebrow — lettere si espandono dall'interno verso l'esterno */
+    @keyframes letterSpread {
+      from { letter-spacing: -0.08em; opacity: 0; transform: scaleX(0.75); }
+      to   { letter-spacing: 0.3em;   opacity: 1; transform: scaleX(1); }
+    }
+
+    @keyframes bgPan {
+      from { background-position: center 30%; }
+      to   { background-position: center 52%; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* Gem separator — rotazione continua */
+    @keyframes gemSpin {
+      from { transform: rotate(45deg); }
+      to   { transform: rotate(405deg); }
+    }
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      .chi-siamo { grid-template-columns: 1fr; gap: 48px; }
+      .ordina { grid-template-columns: 1fr; gap: 48px; }
+      .rec-grid { grid-template-columns: 1fr; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .menu-item:nth-child(odd) { padding-right: 0; border-right: none; }
+      .menu-item:nth-child(even) { padding-left: 0; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 620px) {
+      .hero-brand { font-size: 28vw; }
+      .hero-actions { flex-direction: column; align-items: center; }
+      .chi-stats { grid-template-columns: repeat(3, 1fr); }
+      .footer-top { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .tasche-track { padding: 0 24px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo"><img src="logo.png" alt="Taskeria"></a>
+  <ul class="nav-links">
+    <li><a href="#chi-siamo">Storia</a></li>
+    <li><a href="#tasche">Le Tasche</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#recensioni">Recensioni</a></li>
+  </ul>
+  <a href="#ordina" class="nav-cta">Ordina Ora</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <!-- Ambient video background: darkened/desaturated, adds life without distracting from the signature text -->
+  <div class="hero-video-bg">
+    <video autoplay muted loop playsinline>
+      <source src="crea_una_storia_in_queste_foto.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Artigianale · Dal 2019 · Roma</p>
+    <h1 class="hero-brand">TASKERIA</h1>
+    <p class="hero-tagline">La Romana a Portafoglio</p>
+    <div class="hero-stars">
+      <span class="stars">★★★★★</span>
+      <div class="vdivide"></div>
+      <span>5,0 su Google</span>
+      <div class="vdivide"></div>
+      <span>161 Recensioni</span>
+    </div>
+    <div class="hero-actions">
+      <a href="#ordina" class="btn-primary">Ordina Ora</a>
+      <a href="#menu" class="btn-outline">Menu Completo</a>
+    </div>
+  </div>
+</section>
+
+<div class="sep"><div class="sep-gem"></div></div>
+
+<!-- CHI SIAMO -->
+<section class="chi-siamo" id="chi-siamo">
+  <div class="chi-img-wrap reveal-left">
+    <img src="Screenshot 2026-06-26 140950.png" alt="Pizza romana artigianale Taskeria" loading="lazy">
+  </div>
+  <div class="chi-content">
+    <span class="eyebrow reveal">Chi Siamo</span>
+    <span class="gold-line reveal reveal-d1"></span>
+    <blockquote class="chi-quote reveal-rotate reveal-d1">
+      Ogni morso racconta<br>una storia <em>romana</em>.
+    </blockquote>
+    <p class="chi-body reveal reveal-d2">
+      Nata dalla passione per la tradizione di strada romana, Taskeria porta in ogni tasca
+      la pizza romana al taglio, lo street food per eccellenza. Impasto sottile e croccante,
+      ingredienti freschi selezionati ogni mattina, cottura al mattone che rende ogni morso unico.
+      <br><br>
+      Dall'alba al tramonto, calda e scrocchiarella, la nostra Romana ti aspetta.
+    </p>
+    <div class="chi-stats reveal reveal-d3">
+      <div class="stat">
+        <span class="stat-value" data-count="5" data-decimal="1">5,0</span>
+        <span class="stat-label">Valutazione</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" data-count="161">161</span>
+        <span class="stat-label">Recensioni</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">1–10€</span>
+        <span class="stat-label">Di Fascia</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LE NOSTRE TASCHE -->
+<section class="tasche" id="tasche">
+  <div class="tasche-head">
+    <div class="tasche-head-left">
+      <h2 class="section-title reveal">Scegli la tua preferita</h2>
+    </div>
+    <a href="#menu" class="tasche-see-all reveal">Menu completo →</a>
+  </div>
+  <div class="tasche-track">
+    <article class="card">
+      <img class="card-img" src="Screenshot 2026-06-26 141043.png" alt="La Classica" loading="lazy">
+      <div class="card-body">
+        <p class="card-tag">Classica</p>
+        <h3 class="card-name">La Classica</h3>
+        <p class="card-desc">Prosciutto cotto, mozzarella fior di latte, pomodorini freschi. La tradizione in ogni morso.</p>
+        <div class="card-foot">
+          <span class="card-price">€ 4,50</span>
+          <button class="card-add" aria-label="Aggiungi">+</button>
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <img class="card-img" src="Screenshot 2026-06-26 140950.png" alt="Salame e Cioccolato" loading="lazy">
+      <div class="card-body">
+        <p class="card-tag">Speciale</p>
+        <h3 class="card-name">Salame & Cioccolato</h3>
+        <p class="card-desc">Salame romano artigianale con crema di cioccolato fondente 70%. L'incontro che non ti aspetti.</p>
+        <div class="card-foot">
+          <span class="card-price">€ 5,00</span>
+          <button class="card-add" aria-label="Aggiungi">+</button>
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <img class="card-img" src="Screenshot 2026-06-26 141057.png" alt="Napoli e Fraselle" loading="lazy">
+      <div class="card-body">
+        <p class="card-tag">Signature</p>
+        <h3 class="card-name">Napoli & Fraselle</h3>
+        <p class="card-desc">Pomodoro San Marzano, stracciatella, basilico fresco, fraselle croccanti.</p>
+        <div class="card-foot">
+          <span class="card-price">€ 5,50</span>
+          <button class="card-add" aria-label="Aggiungi">+</button>
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <img class="card-img" src="Screenshot 2026-06-26 141125.png" alt="Scamorza Affumicata" loading="lazy">
+      <div class="card-body">
+        <p class="card-tag">Del Giorno</p>
+        <h3 class="card-name">Scamorza Affumicata</h3>
+        <p class="card-desc">Scamorza affumicata fusa, radicchio croccante, noci tostate, miele di castagno.</p>
+        <div class="card-foot">
+          <span class="card-price">€ 5,00</span>
+          <button class="card-add" aria-label="Aggiungi">+</button>
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <img class="card-img" src="Screenshot 2026-06-26 141110.png" alt="Del Giorno" loading="lazy">
+      <div class="card-body">
+        <p class="card-tag">Stagionale</p>
+        <h3 class="card-name">Del Giorno</h3>
+        <p class="card-desc">La scelta del nostro chef con i migliori ingredienti freschi del mercato di questa mattina.</p>
+        <div class="card-foot">
+          <span class="card-price">€ 5,00</span>
+          <button class="card-add" aria-label="Aggiungi">+</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu" id="menu">
+  <div class="menu-head">
+    <h2 class="section-title reveal">Tutto quello che offriamo</h2>
+    <div class="tabs reveal reveal-d2">
+      <button class="tab active" data-tab="tasche">Le Tasche</button>
+      <button class="tab" data-tab="dolci">Dolci</button>
+      <button class="tab" data-tab="bevande">Bevande</button>
+    </div>
+  </div>
+
+  <div class="panel active" id="tab-tasche">
+    <div class="menu-grid">
+      <div class="menu-item"><div><p class="mi-name">La Classica</p><p class="mi-desc">Prosciutto cotto, mozzarella fior di latte, pomodorini</p></div><span class="mi-price">€ 4,50</span></div>
+      <div class="menu-item"><div><p class="mi-name">Salami Romani</p><p class="mi-desc">Selezione di salami artigianali, rucola, pecorino stagionato</p></div><span class="mi-price">€ 5,00</span></div>
+      <div class="menu-item"><div><p class="mi-name">Salame & Cioccolato</p><p class="mi-desc">Salame romano, crema di cioccolato fondente 70%</p></div><span class="mi-price">€ 5,00</span></div>
+      <div class="menu-item"><div><p class="mi-name">Scamorza Affumicata</p><p class="mi-desc">Scamorza affumicata, radicchio, noci tostate, miele</p></div><span class="mi-price">€ 5,00</span></div>
+      <div class="menu-item"><div><p class="mi-name">Napoli & Fraselle</p><p class="mi-desc">Pomodoro San Marzano, stracciatella, basilico, fraselle</p></div><span class="mi-price">€ 5,50</span></div>
+      <div class="menu-item"><div><p class="mi-name">Acciughe del Mercato</p><p class="mi-desc">Acciughe del Cantabrico, burro all'aglio, capperi di Pantelleria</p></div><span class="mi-price">€ 6,00</span></div>
+      <div class="menu-item"><div><p class="mi-name">Del Giorno</p><p class="mi-desc">Ingredienti freschi scelti ogni mattina dal nostro chef</p></div><span class="mi-price">€ 5,00</span></div>
+      <div class="menu-item"><div><p class="mi-name">La Tua Combo</p><p class="mi-desc">2 tasche a scelta + bevanda inclusa</p></div><span class="mi-price">€ 9,50</span></div>
+    </div>
+    <p class="menu-note">Tutti i prodotti sono preparati giornalmente · Ingredienti freschi e di stagione</p>
+  </div>
+
+  <div class="panel" id="tab-dolci">
+    <div class="menu-grid">
+      <div class="menu-item"><div><p class="mi-name">Tasca Dolce Classica</p><p class="mi-desc">Nutella, fragole fresche, zucchero a velo</p></div><span class="mi-price">€ 3,50</span></div>
+      <div class="menu-item"><div><p class="mi-name">Cioccolato & Nocciole</p><p class="mi-desc">Crema fondente, granella di nocciole piemontesi</p></div><span class="mi-price">€ 4,00</span></div>
+      <div class="menu-item"><div><p class="mi-name">Ricotta & Miele</p><p class="mi-desc">Ricotta fresca di pecora, miele di acacia, scorza di limone</p></div><span class="mi-price">€ 4,00</span></div>
+      <div class="menu-item"><div><p class="mi-name">Frutti di Bosco</p><p class="mi-desc">Crema chantilly, frutti di bosco misti, menta fresca</p></div><span class="mi-price">€ 4,50</span></div>
+    </div>
+  </div>
+
+  <div class="panel" id="tab-bevande">
+    <div class="menu-grid">
+      <div class="menu-item"><div><p class="mi-name">Acqua Naturale / Frizzante</p><p class="mi-desc">500 ml</p></div><span class="mi-price">€ 1,00</span></div>
+      <div class="menu-item"><div><p class="mi-name">Birra Artigianale</p><p class="mi-desc">Selezione locale, 33 cl</p></div><span class="mi-price">€ 4,00</span></div>
+      <div class="menu-item"><div><p class="mi-name">Succo di Frutta</p><p class="mi-desc">Pera, albicocca, pesca, 200 ml</p></div><span class="mi-price">€ 2,00</span></div>
+      <div class="menu-item"><div><p class="mi-name">Caffè Espresso</p><p class="mi-desc">Miscela artigianale tostata a Roma</p></div><span class="mi-price">€ 1,50</span></div>
+      <div class="menu-item"><div><p class="mi-name">Bibite in Lattina</p><p class="mi-desc">Coca-Cola, Fanta, Sprite, 33 cl</p></div><span class="mi-price">€ 2,00</span></div>
+      <div class="menu-item"><div><p class="mi-name">Limonata Artigianale</p><p class="mi-desc">Limoni siciliani, menta, zenzero, 400 ml</p></div><span class="mi-price">€ 3,00</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERSTITIAL — video brings cinematic movement to the break moment -->
+<div class="interstitial">
+  <video autoplay muted loop playsinline class="interstitial-video" aria-hidden="true">
+    <source src="crea_una_storia_in_queste_foto.mp4" type="video/mp4">
+  </video>
+  <div class="interstitial-text">
+    <blockquote class="reveal">
+      La pizza che hai sempre voluto,<br>dove ne hai sempre avuto bisogno.
+    </blockquote>
+  </div>
+</div>
+
+<!-- RECENSIONI -->
+<section class="recensioni" id="recensioni">
+  <div class="rec-head">
+    <div class="rating-display reveal">
+      <span class="rating-num">5,0</span>
+      <div class="rating-meta">
+        <span class="rating-stars">★★★★★</span>
+        <span class="rating-count">161 recensioni su Google</span>
+      </div>
+    </div>
+  </div>
+  <div class="rec-grid">
+    <div class="rec-card reveal-blur">
+      <div class="rec-stars">★★★★★</div>
+      <p class="rec-text">La migliore pizza romana che abbia mai assaggiato. Scrocchiarella fuori, soffice dentro, ingredienti freschissimi. Ci torno ogni settimana senza eccezioni.</p>
+      <div class="rec-author">
+        <div class="rec-avatar">MR</div>
+        <div><p class="rec-name">Marco Romano</p><p class="rec-date">3 settimane fa</p></div>
+      </div>
+    </div>
+    <div class="rec-card reveal-blur reveal-d1">
+      <div class="rec-stars">★★★★★</div>
+      <p class="rec-text">La combo Salame & Cioccolato sembra strana ma è assolutamente divina. Servizio velocissimo e gentilissimi. Questo posto è una gemma nascosta di Roma.</p>
+      <div class="rec-author">
+        <div class="rec-avatar">SP</div>
+        <div><p class="rec-name">Sofia Pellegrini</p><p class="rec-date">1 mese fa</p></div>
+      </div>
+    </div>
+    <div class="rec-card reveal-blur reveal-d2">
+      <div class="rec-stars">★★★★★</div>
+      <p class="rec-text">Finalmente ho trovato la vera romana a portafoglio. Impasto perfetto, ingredienti di qualità, prezzi onestissimi. Non potevo chiedere di più.</p>
+      <div class="rec-author">
+        <div class="rec-avatar">LV</div>
+        <div><p class="rec-name">Luca Valentini</p><p class="rec-date">2 mesi fa</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"><div class="sep-gem"></div></div>
+
+<!-- ORDINA -->
+<section class="ordina" id="ordina">
+  <div>
+    <div class="ordina-head">
+      <h2 class="section-title">Prenota o Ordina</h2>
+      <p class="ordina-sub">Porta la nostra pizza direttamente a casa tua, o ritirala già pronta e calda al banco.</p>
+    </div>
+    <form onsubmit="return false">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nome</label>
+          <input type="text" class="form-input" placeholder="Il tuo nome">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Telefono</label>
+          <input type="tel" class="form-input" placeholder="+39 06...">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Modalità</label>
+        <select class="form-select">
+          <option>Ritiro in sede</option>
+          <option>Consegna a domicilio</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Data</label>
+          <input type="date" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Orario</label>
+          <input type="time" class="form-input">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Note sull'ordine</label>
+        <textarea class="form-textarea" placeholder="Allergie, preferenze, tasche scelte..."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Invia l'Ordine →</button>
+    </form>
+  </div>
+  <div class="info-block">
+    <h3>Dove Siamo</h3>
+    <div class="info-row">
+      <svg class="info-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1C5.79 1 4 2.79 4 5c0 3.25 4 9 4 9s4-5.75 4-9c0-2.21-1.79-4-4-4Zm0 5.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" fill="currentColor"/></svg>
+      <div><p class="info-lbl">Indirizzo</p><p class="info-val">Via della Croce 12<br>Roma (RM) 00187</p></div>
+    </div>
+    <div class="info-row">
+      <svg class="info-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.5V8l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <div><p class="info-lbl">Orari</p><p class="info-val">Lun - Ven: 10:00 - 21:00<br>Sab - Dom: 10:00 - 22:00</p></div>
+    </div>
+    <div class="info-row">
+      <svg class="info-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 2h2.5l1 3-1.5 1a7 7 0 0 0 3 3l1-1.5 3 1V11c0 1.1-.9 2-2 2A10 10 0 0 1 3 4c0-1.1.9-2 2-2Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><p class="info-lbl">Telefono</p><p class="info-val">+39 06 1234 5678</p></div>
+    </div>
+    <div class="info-row">
+      <svg class="info-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="4" y="1" width="8" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="12" r="0.9" fill="currentColor"/><line x1="6" y1="3.5" x2="10" y2="3.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+      <div><p class="info-lbl">Consegna tramite</p><p class="info-val">Glovo · Deliveroo · Just Eat</p></div>
+    </div>
+    <img src="Screenshot 2026-06-26 141110.png" alt="Taskeria street food" class="info-img" loading="lazy">
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <img src="logo.png" alt="Taskeria">
+      <p>La Romana a Portafoglio.<br>Artigianale dal 2019<br>nel cuore di Roma.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Naviga</h4>
+      <ul>
+        <li><a href="#chi-siamo">Chi Siamo</a></li>
+        <li><a href="#tasche">Le Nostre Tasche</a></li>
+        <li><a href="#menu">Menu Completo</a></li>
+        <li><a href="#recensioni">Recensioni</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contatti</h4>
+      <ul>
+        <li><a href="tel:+390612345678">+39 06 1234 5678</a></li>
+        <li><a href="mailto:ciao@taskeria.it">ciao@taskeria.it</a></li>
+        <li><a href="#">Via della Croce 12, Roma</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Seguici</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">TikTok</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Taskeria. La Romana a Portafoglio. Tutti i diritti riservati.</p>
+    <p>Fatto con amore a Roma</p>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  // Scroll reveal — three animation materials: translateY / translateX / blur
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.01 });
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-blur, .reveal-rotate, .gold-line').forEach(el => revealObs.observe(el));
+
+  // 3D card tilt on mouse move
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width  - 0.5;
+      const y = (e.clientY - r.top)  / r.height - 0.5;
+      card.style.transition = 'none';
+      card.style.transform = `perspective(700px) rotateX(${-y * 16}deg) rotateY(${x * 16}deg) translateY(-10px) scale(1.03)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform 0.65s cubic-bezier(0.16,1,0.3,1)';
+      card.style.transform = '';
+    });
+  });
+
+  // Particle burst on card-add click
+  function cardBurst(btn) {
+    const colors = ['#C8922A','#E5B84A','#F5F0E8','#C8922A','#E5B84A'];
+    for (let i = 0; i < 10; i++) {
+      const p = document.createElement('span');
+      p.style.cssText = 'position:absolute;width:5px;height:5px;border-radius:50%;pointer-events:none;z-index:20;left:50%;top:50%;';
+      p.style.background = colors[i % colors.length];
+      btn.closest('.card').appendChild(p);
+      const angle = (i / 10) * Math.PI * 2;
+      const dist = 35 + Math.random() * 25;
+      p.animate([
+        { transform: 'translate(-50%,-50%) scale(1)', opacity: 1 },
+        { transform: `translate(calc(-50% + ${Math.cos(angle)*dist}px), calc(-50% + ${Math.sin(angle)*dist}px)) scale(0)`, opacity: 0 }
+      ], { duration: 600, easing: 'cubic-bezier(0.16,1,0.3,1)', fill: 'forwards' });
+      setTimeout(() => p.remove(), 650);
+    }
+  }
+
+  // Animated counters
+  const counterObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = parseInt(el.dataset.count);
+      const isDecimal = !!el.dataset.decimal;
+      let startTime = null;
+      const duration = 1400;
+      const tick = (ts) => {
+        if (!startTime) startTime = ts;
+        const pct = Math.min((ts - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - pct, 3);
+        const val = Math.round(eased * target);
+        el.textContent = isDecimal ? val + ',0' : val;
+        if (pct < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      counterObs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach(el => counterObs.observe(el));
+
+  // Menu tabs
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Card add button micro-interaction + particle burst
+  document.querySelectorAll('.card-add').forEach(btn => {
+    btn.addEventListener('click', () => {
+      cardBurst(btn);
+      btn.textContent = '✓';
+      btn.classList.add('added');
+      setTimeout(() => {
+        btn.textContent = '+';
+        btn.classList.remove('added');
+      }, 1200);
+    });
+  });
+</script>
+
+</body>
+</html>
